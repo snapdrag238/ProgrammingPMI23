@@ -1,15 +1,17 @@
 import math
 import random
 
-MAXF = 30000 # максимальне дозволене ціле число для перевірки щоб запобігти переповненнямм
 CONSTK = 20 # кільксіть раундів для теаореми міллера-рабіна (більше краще)
+
+MAXTRIVDIV = 10**12
+MAXWILSON = 1000
 
 def checkPrimeTrivDiv(nums : list[int]) -> int : # метод пробного ділення
     primeCounter = 0
 
     for n in nums :
-        if n >= MAXF :
-            print(f"[Trial division]Число {n} проіноровано - запобігання переповнення памяті")
+        if n >= MAXTRIVDIV :
+            print(f"[Trial division]Число {n} проіноровано - запобігання черезмірного навантаження CPU")
             continue
         if n > 1 :
             for i in range(2, int(math.isqrt(n))+1) :
@@ -24,7 +26,7 @@ def checkPrimeWilson(nums : list[int]) -> int : # теорема вілсона 
     primeCounter = 0
 
     for n in nums :
-        if n >= MAXF :
+        if n >= MAXWILSON :
             print(f"[Wilson]Число {n} проіноровано - запобігання переповнення памяті")
             continue
         if n > 1:
@@ -35,7 +37,6 @@ def checkPrimeWilson(nums : list[int]) -> int : # теорема вілсона 
 
 # def checkPrimeFermat(nums : list[int]) -> int : # теорема ферма : a^(p-1) == 1 (mod p)
 #     primeCounter = 0
-
 #     for n in nums :
 #         if n >= MAXF :
 #             print(f"[Fermat]Число {n} проіноровано - запобігання переповнення памяті")
@@ -47,26 +48,23 @@ def checkPrimeWilson(nums : list[int]) -> int : # теорема вілсона 
 #                 continue
 #             if n % 2 == 0:
 #                 continue
-
 #             for _ in range(CONSTK) :
 #                 a = random.randint(2, n - 2)
 #                 if pow(a, n-1, n) != 1 :
 #                     break
 #             else:
 #                 primeCounter += 1
-
 #     return primeCounter
 
 def checkPrimeMillRab(nums : list[int]) -> int : # n-1 = 2^s * d
     primeCounter = 0
 
     for n in nums :
-        if n >= MAXF :
-            print(f"[Miller-Rabin]Число {n} проіноровано - запобігання переповнення памяті")
+        #if n >= MAXF :
+        #    print(f"[Miller-Rabin]Число {n} проіноровано - запобігання переповнення памяті")
+        #    continue
+        if n <= 1:
             continue
-        else:
-            if n <= 1:
-                continue
         if n in (2, 3):
             primeCounter += 1
             continue
