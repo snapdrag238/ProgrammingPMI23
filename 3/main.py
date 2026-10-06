@@ -9,20 +9,26 @@ def pairs_with_sum( *numbers : int, target : int) -> list[tuple[int, int]]:
 
     Повертає відсортованйи список унікальних пар  
     """
-    seen = set() 
-    raw_pairs : list[tuple[int, int]] = []
+    seen : set[int] = set()
+    pairs : set[tuple[int, int]] = set()
 
     for num in numbers:
         diff = target - num
         if diff in seen:
-            raw_pairs.append([min(diff, num), max(diff, num)])
-        seen.add(num)
+            pairs.add((diff, num) if diff <= num else (num, diff))
+            seen.remove(diff)
+        else:
+            seen.add(num)
 
-    unique_pairs = list({tuple(sorted(pair)) for pair in raw_pairs})
+    return sorted(pairs)
 
-    return sorted(unique_pairs)
- 
 def main():
+    print("\n Демонстраційні виклики з прикладів:")
+    print(pairs_with_sum(1, 2, 3, 4 ,5, target=5)) #[(1, 4), (2, 3)]
+    print(pairs_with_sum(1, 3, 3, target=4)) # [(1, 3)]  (друга 3 не використовується, бо 1 вже використана)
+    print(pairs_with_sum(2, 2, 2, 2, target=4)) # [(2, 2)]  (пари унікальні)
+    print(pairs_with_sum(1, 2, 3, target=10) , end="\n\n") # []
+
     try:
         raw_nums = input("Введіть ціли числа через кому або пробіл: ").replace(",", " ").split(' ')
         if not raw_nums:
